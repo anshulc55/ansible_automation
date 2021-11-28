@@ -1,0 +1,26 @@
+#!/root/ansible/myansible/bin/ansible-playbook
+- name: This will show the Use of Comparision Operators
+  hosts: localhost
+  gather_facts: false
+
+  vars:
+    a : "HELLO"
+    d : "hello"
+    b : 10
+    c : 20
+    e : [1,5,9,10,15,109]
+    x: true
+    y: false
+    z: false
+    m: true
+
+  tasks:
+    - name: Operations on variables
+      debug: 
+        msg:
+          - "x and y : {{ x and y }}"
+          - "x and m : {{ x and m }}"
+          - "x or m : {{ x or m }}"
+          - "y or z : {{ y or z}}"
+          - "x and y or m: {{ x and y or m}}"
+

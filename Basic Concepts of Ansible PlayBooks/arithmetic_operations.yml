@@ -1,0 +1,19 @@
+#!/root/ansible/myansible/bin/ansible-playbook
+- name: This is to Display Arithmetic Opeations on Varaibles
+  hosts: localhost
+  gather_facts: false
+
+  vars:
+    a : 10
+    b : 20 
+
+  tasks:
+    - name: Operations on variables
+      debug: 
+        msg:
+        - "value of a is : {{a}}"
+        - "value of b is : {{b}}"
+        - "Addtion of a & b : {{a + b}}"
+        - "Subs of a & b : {{a - b}}"
+        - "Multi of a & b : {{a * b}}"
+        - "Devide of a & b : {{a/b}}"

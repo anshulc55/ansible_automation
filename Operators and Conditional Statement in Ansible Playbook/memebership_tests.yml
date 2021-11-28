@@ -1,0 +1,36 @@
+#!/root/ansible/myansible/bin/ansible-playbook
+- name: This will show the Use of Comparision Operators
+  hosts: localhost
+  gather_facts: false
+
+  vars:
+    a : "HELLO"
+    d : "hello"
+    b : 10
+    c : 20
+    e : [1,5,9,10,15,109]
+    x: "/root/ansible/operators_statement"
+    y: "/root/ansible/operators_statement/comparision_operator.yml"
+
+  tasks:
+    - name: Operations on variables
+      debug: 
+        msg:
+          - "The List is - {{ e }}, Value of c is - {{ c }} and Value of b is - {{ b }}"
+          - "Is b memeber of e : {{ b in e }}"
+          - "Is c memeber of e : {{ c in e }}"
+          - "Is 25 memeber of e : {{ 25 in e }}"
+          - "Is c not a memeber of e : {{ c not in e }}"
+
+    - name: Tests Operators
+      debug: 
+        msg:
+          - "a is defined?   {{ a is defined }}"
+          - "c is defined?   {{ c is defined }}"
+          - "a is Upper?   {{ a is upper }}"
+          - "b is Lower?   {{ b is lower }}"
+          - "e is String?   {{ e is string }}"
+          - "a is devisble by 7?  {{ a is divisibleby 7 }}"
+          - "y is file:   {{ y is file }}"
+          - "x is directory: {{ x is directory }}"
+          - "y is directory: {{ y is directory }}"

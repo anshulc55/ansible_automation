@@ -1,0 +1,27 @@
+#!/root/ansible/myansible/bin/ansible-playbook
+- name: This is to Display Arithmetic Opeations on Varaibles
+  hosts: localhost
+  gather_facts: false
+
+  vars:
+    a : 10
+    b : "{{a*10}}"
+
+  vars_prompt:
+    - name : x
+      prompt: Please enter Value of x 
+      private: no
+
+    - name : y
+      prompt: Please eneter value of y
+      private: no
+
+  tasks:
+    - name: Operations on variables
+      debug: 
+        msg:
+        - "value of a is : {{a}}"
+        - "value of b is : {{b}}"
+        - "Addition of User Defined Values x, y is : {{x+y}}"
+        - "Addition of User Defined Values x, y is : {{x|int + y|int}}"
+        - "Multiple of User Defined Values x, y is : {{x|int * y|int}}"

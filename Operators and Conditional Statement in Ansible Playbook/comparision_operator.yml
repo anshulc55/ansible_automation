@@ -1,0 +1,29 @@
+#!/root/ansible/myansible/bin/ansible-playbook
+- name: This will show the Use of Comparision Operators
+  hosts: localhost
+  gather_facts: false
+
+  vars:
+    a : "HELLO"
+    d : "hello"
+    b : 10
+    c : 20
+
+  tasks:
+    - name: Operations on variables
+      debug: 
+        msg:
+          - "The value of b is - {{ b }}, and Value of c is - {{ c }}"
+          - "Is b greater than c : {{ b > c }}"
+          - "Is b less than c : {{ b < c }}"
+          - "Is b equals to c : {{ b == c }}"
+          - "Is b not equal to c : {{ b != c }}"
+          - "Is b greater than or equal to c : {{ b >= c }}"
+          - "Is b less than or equal to c : {{ b <= c }}"
+          - "Below Comparision is for String"
+          - "The value of a is - {{ a }}, and Value of d is - {{ d }}"
+          - "Is a greater than d : {{ a > d }}"
+          - "Is a less than d : {{ a < d }}"
+          - "Is a equals to d : {{ a == d }}"
+          - "Is a not equal to d : {{ a != d }}"
+          - "Is a equals to d : {{ a|lower == d }}"

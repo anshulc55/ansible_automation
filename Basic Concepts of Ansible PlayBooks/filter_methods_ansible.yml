@@ -1,0 +1,22 @@
+#!/root/ansible/myansible/bin/ansible-playbook
+- name: This is to Display filter and method Opeations on Varaibles
+  hosts: localhost
+  gather_facts: false
+
+  vars:
+    a : "HeLLo tHiS is ANSHUL and i aM a SoftWARE enginEER"
+    b : 10
+    c : "20"
+
+  tasks:
+    - name: Operations on variables
+      debug: 
+        msg:
+        - "value of a is : {{a}}"
+        - "value of b + c is : {{b+c|int}}"
+        - "Small case value of a : {{a|lower}}"
+        - "Capital case Value of a: {{a|upper}}"
+        - "Title Case value of a : {{a|title}}"
+        - "Small case value of a : {{a.lower()}}"
+        - "Capital case Value of a: {{a.upper()}}"
+        - " Split of String a : {{a.split()}} " 

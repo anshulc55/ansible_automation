@@ -1,0 +1,25 @@
+#!/root/ansible/myansible/bin/ansible-playbook
+- name: This is Overview of Ansible Debug Module
+  hosts: all
+  remote_user: ec2-user
+  become: 'yes'
+  become_user: root
+
+  vars:
+    test: hello, this is dummy value
+    my_name: Anshul Chauhan
+    my_age: 31
+    my_height: 5.11
+    is_male: true
+
+  tasks:
+    - name: Reading Ansible Playbook varaible
+      debug:
+        var: test
+
+    - name: Reading Ansible Playbook varaibles
+      debug:
+        msg:
+        - My name is {{ my_name }}
+        - I am {{ my_age }} years old.
+        - And I am {{ my_height }} long, my gender is male - {{ is_male }}

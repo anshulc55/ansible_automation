@@ -1,0 +1,26 @@
+#!/root/ansible/myansible/bin/ansible-playbook
+- name: This is for Conditional Statement
+  hosts: localhost
+  gather_facts: false
+
+  vars:
+    x : 20
+    y : 10
+
+  tasks:
+    - name: Operation for Conditional Statement
+      debug: 
+        msg:
+          - "Value of x : {{ x }}, Value of y: {{ y }}"      
+
+    - name: Operation for Conditional Statement I
+      debug: 
+        msg:
+          - "x is Small of y"
+      when: x < y
+
+    - name: Operation for Conditional Statement II
+      debug: 
+        msg:
+          - "x is not Small then y"
+      when: x > y

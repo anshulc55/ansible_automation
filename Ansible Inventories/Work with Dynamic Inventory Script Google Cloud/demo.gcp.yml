@@ -1,0 +1,10 @@
+plugin: gcp_compute
+projects:
+  - velvety-castle-269006
+auth_kind: serviceaccount
+service_account_file: /root/ansible/ansible-gcp-service-account.json
+keyed_groups:
+  - key: labels
+    prefix: label
+  - key: zone
+    prefix: zone

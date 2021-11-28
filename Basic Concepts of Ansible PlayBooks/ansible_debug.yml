@@ -1,0 +1,33 @@
+#!/root/ansible/myansible/bin/ansible-playbook
+- name: This is Overview of Ansible Debug Module
+  hosts: all
+  remote_user: ec2-user
+  become: 'yes'
+  become_user: root
+
+  tasks:
+    - name: Task for Debug Module Messaging
+      debug:
+        msg: "Hi, this is Custom message for Debug Module"
+    
+    - name: Prints two lines of messages
+      debug:
+        msg:
+        - "Hi This is multiline message."
+        - "And I am line number 2..."
+    
+    - name: Print Varaible in messages
+      debug:
+        msg: 
+        - "Host IP is - {{ inventory_hostname }}"
+        - Host IP is - {{ inventory_hostname }}
+        - System {{ inventory_hostname }} has gateway {{ ansible_default_ipv4.gateway }}
+    
+    - name: debug module var parameter
+      debug:
+        var: inventory_hostname 
+    
+    - name: verbocity in debug module
+      debug:
+        msg: "Hi this is deep logging at deub level 2"
+        verbocity: 2

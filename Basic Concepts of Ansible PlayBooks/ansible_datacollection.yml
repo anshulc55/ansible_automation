@@ -1,0 +1,33 @@
+#!/root/ansible/myansible/bin/ansible-playbook
+- name: This is Overview of Ansible Data Collection
+  hosts: all
+  remote_user: ec2-user
+  become: 'yes'
+  become_user: root
+
+  vars:
+    xyz: Hello this is XYZ
+    packages: ['wget', 'unzip', 'curl', 'vim']
+    cities:
+    - New York
+    - London
+    - Tokyo
+    - Dubai
+    web_server: {'Linux': 'httpd', 'Unix': 'apache2'}
+
+  tasks:
+    - name: This is Data Collection Retrieval 
+      debug:
+        var: xyz 
+
+    - name: Getting Sequence Data Collection F 1
+      debug:
+        var: packages
+
+    - name: Getting Sequence Data Collection F 2
+      debug:
+        var: cities
+
+    - name: Getting Sequence Data Collection F 3
+      debug:
+        var: web_server

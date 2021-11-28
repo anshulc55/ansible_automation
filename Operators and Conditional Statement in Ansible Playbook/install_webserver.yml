@@ -1,0 +1,12 @@
+#!/root/ansible/myansible/bin/ansible-playbook
+- name: Installing Web-Serers on Production Machines
+  hosts: all
+  remote_user: "ec2-user if ( {{ansible_distribution}} == "Ubuntu" ) else (ubuntu)"
+  become: 'yes'
+  become_user: root
+
+  tasks:
+    - name: Installing Httpd Web-Serer
+      yum:
+        name: httpd
+        state: present
