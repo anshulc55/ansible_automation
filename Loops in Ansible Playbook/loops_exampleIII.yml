@@ -1,0 +1,39 @@
+#!/root/ansible/myansible/bin/ansible-playbook
+- name: Loops in Ansible Playbook Part III
+  hosts: all
+  remote_user: ec2-user
+  become: 'yes'
+  become_user: root
+
+  vars:
+    packages: [ 'gettext-devel', 'openssl-devel', 'perl-CPAN', 'perl-devel', 'zlib-devel', 'unzip', 'curl', 'wget' ]
+  tasks:
+    - name: Install Multiple Packages using Loop
+      yum:
+        name: '{{ item }}'
+        state: present
+      loop:
+        - gettext-devel
+        - openssl-devel
+        - perl-CPAN
+        - perl-devel
+        - zlib-devel
+        - unzip
+        - curl
+        - wget
+
+
+    - name: UnInstall Multiple Packages using Index Loop
+      yum:
+        name: '{{ item.1 }}'
+        state: absent
+      with_indexed_items:
+        - "{{ packages }}"
+
+
+    - name: Install Multiple Packages using Index Loop
+      yum:
+        name: '{{ item.0 }}'
+        state: present
+      with_together:
+        - "{{ packages }}"

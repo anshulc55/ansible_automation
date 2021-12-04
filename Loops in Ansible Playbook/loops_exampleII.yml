@@ -1,0 +1,39 @@
+#!/root/ansible/myansible/bin/ansible-playbook
+- name: Loops in Ansible Playbook Part II
+  hosts: all
+  remote_user: ec2-user
+  become: 'yes'
+  become_user: root
+
+  vars:
+    alpha: [ 'a', 'b', 'c', 'd' ]
+    numbers:  [ 1, 2, 3, 4 ]
+
+  tasks:
+    # Add Multiple User's in one go
+    - name : Random Looping Example
+      debug:
+        msg: "{{ item }}"
+      with_random_choice:
+        - "go through the door"
+        - "drink from the goblet"
+        - "press the red button"
+        - "do nothing"
+    
+    # Looping Over A List With An Index
+    - name: Looping over a List
+      debug:
+        msg: "At array position {{ item.0 }} there is a value {{ item.1 }}"
+      with_indexed_items:
+        - "{{ alpha }}"
+
+    # Do Until Loop
+    - name: Ensure Apache is Running
+      service:
+        name: httpd
+        state: started
+      register: result
+      until: result.changed == True
+      retries: 10
+      delay: 4
+

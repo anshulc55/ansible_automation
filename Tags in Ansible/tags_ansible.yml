@@ -1,0 +1,42 @@
+#!/root/ansible/myansible/bin/ansible-playbook
+- name: This will show the Use of Tags
+  hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: Operations using the Tags 1
+      debug: 
+        msg:
+          - "Hi, This is Debug Message 1 "
+      tags:
+        - first
+
+    - name: Operations using the Tags 2
+      debug: 
+        msg:
+          - "Hi, This is Debug Message 2 "
+      tags:
+        - Second
+        - Common
+
+    - name: Operations using the Tags 3
+      debug: 
+        msg:
+          - "Hi, This is Debug Message 3 "
+
+    - name: Operations using the Tags 4
+      debug: 
+        msg:
+          - "Hi, This is Debug Message 4 "
+
+    - name: Operations using the Tags 5
+      debug: 
+        msg:
+          - "Hi, This is Debug Message 5 "
+      tags:
+        - first
+
+    - name: Operations using the Tags 6
+      debug: 
+        msg:
+          - "Hi, This is Debug Message 6 "
