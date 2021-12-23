@@ -1,0 +1,29 @@
+#!/root/ansible/myansible/bin/ansible-playbook
+- name: Ansible Blocks
+  hosts: all
+  remote_user: ec2-user
+
+  tasks:
+    - block:
+      - name: List usr directory content
+        command: "ls -l /usr/"
+        register: usr_out
+    
+      - name: List root partition content
+        command: "ls -l /roott/"
+        register: root_out
+
+      - name: List bin diretcory content
+        command: "ls -l /bin/"
+        register: bin_out
+      become: 'yes'
+      ignore_errors: yes
+
+    - name: List ansible user's home directory content
+      command: "ls -l ~/"
+      register: userhome_out
+
+    - debug: var=usr_out
+    - debug: var=root_out
+    - debug: var=userhome_out
+    #- debug: var=bin_out

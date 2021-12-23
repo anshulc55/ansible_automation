@@ -1,0 +1,52 @@
+#!/root/ansible/myansible/bin/ansible-playboo
+
+- name: Install and Configure Tomcat using Ansible
+  hosts: all
+  remote_user: ec2-user
+  become: 'yes'
+  become_user: root 
+
+  vars:
+    java_version: java-1.8.0-openjdk
+    alternative_path: java-1.8.0-openjdk-1.8.0.302.b08-0.amzn2.0.1.x86_64 
+    tomcat_version: 9.0.56 
+    tomcat_port: 8090
+
+  tasks:
+  - name: Update All Packages on Machine
+    yum:
+      name: "*"
+      state: latest
+
+  - name: Install Java on Machine
+    yum:
+      name: "{{ java_version }}"
+      state: present
+  
+  - name: Set Java 8 Alternative on Machine
+    alternatives:
+      name: java
+      link: /bin/java
+      path: /usr/lib/jvm/{{alternative_path}}/jre/bin/java 
+
+  - name: Download Tomcat Tar file
+    get_url:
+      url: https://dlcdn.apache.org/tomcat/tomcat-9/v{{tomcat_version}}/bin/apache-tomcat-{{tomcat_version}}.tar.gz
+      dest: /usr/local
+
+  - name: Extract Tomcat file
+    unarchive:
+      src: /usr/local/apache-tomcat-{{tomcat_version}}.tar.gz
+      dest: /usr/local
+      remote_src: yes
+  
+  - name: Rename Tomcat dir
+    command: mv /usr/local/apache-tomcat-{{tomcat_version}} /usr/local/tomcat 
+
+  - name: Replacing default port with required port
+    template:
+      src: server.xml.j2
+      dest: /usr/local/tomcat/conf/server.xml 
+
+  - name: Starting Tomcat process
+    shell: nohup /usr/local/tomcat/bin/startup.sh &

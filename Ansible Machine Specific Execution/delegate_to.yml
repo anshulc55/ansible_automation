@@ -1,0 +1,19 @@
+#!/root/ansible/myansible/bin/ansible-playboo
+
+- name: Ansible Delegate_to examples
+  hosts: all
+  remote_user: ec2-user
+  become: 'yes'
+  become_user: root 
+
+  vars:
+    tmplog: /tmp/connection.log
+  
+  tasks:
+  - name: create tmplog
+    shell: test ! -f {{ tmplog }} && touch {{ tmplog }}
+    failed_when: false
+  
+  - name: delegate_to
+    shell: echo "delegate_to . {{ inventory_hostname }} $(hostname) ." >> {{ tmplog }}
+    delegate_to: ec2-13-59-156-142.us-east-2.compute.amazonaws.com

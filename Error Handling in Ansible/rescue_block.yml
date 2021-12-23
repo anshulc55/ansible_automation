@@ -1,0 +1,24 @@
+#!/root/ansible/myansible/bin/ansible-playbook
+- name: Ansible Blocks
+  hosts: all
+  remote_user: ec2-user
+
+  tasks:
+    - block:
+        - name: List home directory content
+          command: ls -l ~/
+          
+        - name: Failing intentionally
+          command: ls -l /tmp/
+      become: 'yes'
+      #ignore_errors: yes
+
+      rescue:
+        - name: Rescue block (perform recovery)
+          debug:
+            msg: 'Something went wrong, cleaning up..'
+
+      always:
+        - name: This will execute always
+          debug:
+            msg: I will execute even in failure scenario

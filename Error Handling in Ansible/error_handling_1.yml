@@ -1,0 +1,25 @@
+#!/root/ansible/myansible/bin/ansible-playbook
+- name: Error Handling Part I
+  hosts: all
+  remote_user: ec2-user
+  become: 'yes'
+  become_user: root
+
+  tasks:
+    - name: List all files/dirs in /etc location
+      command: "ls /etcc/"
+      register: home_out
+      ignore_errors: yes
+    - debug: var=home_out
+
+    - name: List all files/dirs in /tmp location
+      command: "ls /tmp/"
+      register: tmp_out
+    - debug: var=tmp_out
+
+    - name: List all files/dirs in /etc location
+      command: "ls /etcc/"
+      register: home1_out
+      ignore_errors: yes
+    - debug: var=home1_out
+      failed_when: home1_out.rc==2

@@ -1,0 +1,15 @@
+#!/root/ansible/myansible/bin/ansible-playbook
+- name: Local Action in Ansible
+  hosts: all
+  remote_user: ec2-user
+  become: 'yes'
+  become_user: root
+
+  tasks:
+    - name: This will create a local file /tmp/local_file.ini
+      local_action: command touch /tmp/"{{ ansible_hostname }}"_local_file.ini
+
+    - name: Here we copy the local file to remote 
+      copy:
+        src: /tmp/{{ ansible_hostname }}_local_file.ini
+        dest: /var/tmp/

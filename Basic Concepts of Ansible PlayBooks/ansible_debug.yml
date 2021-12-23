@@ -8,7 +8,7 @@
   tasks:
     - name: Task for Debug Module Messaging
       debug:
-        msg: "Hi, this is Custom message for Debug Module"
+        msg: "Hi, this is Custom message for Debug Module {{ ansible_os_family }}"
     
     - name: Prints two lines of messages
       debug:

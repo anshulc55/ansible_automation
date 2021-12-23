@@ -1,0 +1,9 @@
+#!/root/ansible/myansible/bin/ansible-playbook
+- name: Play 2 from Include
+  hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: Play 2 - Task 1
+      debug:
+        msg: "Play 2 - Task 1"

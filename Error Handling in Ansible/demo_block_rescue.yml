@@ -1,0 +1,62 @@
+#!/root/ansible/myansible/bin/ansible-playbook
+- name: Error Handling Part I
+  hosts: all
+  remote_user: ec2-user
+  become: 'yes'
+  become_user: root
+
+  vars:
+    anonymous_enable: yes
+    local_enable: yes
+    write_enable: yes
+    anon_upload_enable: yes
+
+  tasks:
+    - block:
+        - name: install vsftp
+          yum: 
+            name: vsftpd
+
+        - name: take backup of existing config
+          copy:
+            src: /etc/vsftpd/vsftpd.conf
+            dest: /etc/vsftpd/vsftpd.conf.bkp
+            remote_src: yes
+        
+        - name: use Jinja2 template to configure vsftpd
+          template:
+            src: vsftpd.j2
+            dest: /etc/vsftpd/vsftpd.conf
+
+        - name: View Custom Jinja Teamplate values
+          command: "cat /etc/vsftpd/vsftpd.conf"
+          register: jinja_out
+        - debug: var=jinja_out
+        
+        - name: This will fail
+          command: "ls -l /tmp/does-not-exist"
+
+        
+      rescue:
+        - name: Recovery block
+          debug:
+            msg: "something failed, restoring vsftpd.conf from backup"
+
+        - name: 
+          copy:
+            src: /etc/vsftpd/vsftpd.conf.bkp
+            dest: /etc/vsftpd/vsftpd.conf
+            remote_src: yes 
+
+        - name: View vsftd.conf values
+          command: "cat /etc/vsftpd/vsftpd.conf"
+          register: conf_out
+        - debug: var=conf_out        
+
+
+      always:
+        - name: Restarting vsftpd
+          service:
+            name: vsftpd
+            state: restarted
+        
