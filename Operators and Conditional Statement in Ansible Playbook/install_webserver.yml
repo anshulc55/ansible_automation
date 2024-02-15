@@ -2,11 +2,10 @@
 - name: Installing Web-Serers on Production Machines
   hosts: all
   remote_user: "ec2-user if ( {{ansible_distribution}} == "Ubuntu" ) else (ubuntu)"
-  become: 'yes'
-  become_user: root
+  become: yes
 
   tasks:
-    - name: Installing Httpd Web-Serer
+    - name: Installing Apache Web-Serer
       yum:
         name: httpd
-        state: present
+        state: latest
