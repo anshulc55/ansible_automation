@@ -1,0 +1,12 @@
+---
+- name: Copy nginx.conf to remote host
+  hosts: all
+  tasks:
+    - name: Copy nginx.conf
+      copy:
+        src: /etc/nginx/nginx.conf    # Local path of the file
+        dest: /root/ansible/nginx.conf    # Destination path on remote host
+        owner: root
+        group: root
+        mode: '0644'
+      become: yes

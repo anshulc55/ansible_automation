@@ -1,0 +1,22 @@
+---
+- name: Generate example logs on remote hosts
+  hosts: all
+  tasks:
+    - name: Create log directory if it doesn't exist
+      file:
+        path: /var/log/
+        state: directory
+    
+    - name: Generate example log file
+      ansible.builtin.shell: |
+        echo "This is a sample log file." > /var/log/example.log
+
+---
+- name: Fetch example logs from remote hosts
+  hosts: all
+  tasks:
+    - name: Fetch example log file from remote host
+      fetch:
+        src: /var/log/example.log
+        dest: /tmp/logs/
+        flat: no

@@ -1,0 +1,26 @@
+- hosts: localhost
+  tasks:
+    - name: Run a command on the local machine
+      command: echo "Running on the local host"
+  tags: scenario1
+
+
+- hosts: all
+  tasks:
+    - name: Run a command on the remote hosts
+      command: echo "Running on remote host"
+    
+    - name: Run a command on the local machine
+      command: echo "Running on the local host"
+      delegate_to: localhost
+  tags: scenario2
+
+
+- hosts: all
+  tasks:
+    - name: Run a command on the remote hosts
+      command: echo "Running on remote host"
+    
+    - name: Run a command on the local machine
+      local_action: command echo "Running on the local host"
+  tags: scenario3

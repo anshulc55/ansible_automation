@@ -1,0 +1,39 @@
+---
+- name: Install and configure Nginx with dynamic server_name
+  hosts: webservers
+  become: yes  # Ensure the tasks run with root privileges
+  vars:
+    nginx_servers:
+      - { server_name: '{{ ansible_hostname }}', port: 80, proxy_pass: 'backend1' }
+      - { server_name: '{{ ansible_hostname }}', port: 80, proxy_pass: 'backend2' }
+      - { server_name: '{{ ansible_hostname }}', port: 80, proxy_pass: 'backend3' }
+      - { server_name: '{{ ansible_hostname }}', port: 80, proxy_pass: 'backend4' }
+  tasks:
+    - name: Ensure Nginx is installed
+      apt:
+        name: nginx
+        state: present
+      when: ansible_os_family == "Debian"
+
+    - name: Create Nginx configuration from template
+      template:
+        src: nginx.conf.j2
+        dest: /etc/nginx/nginx.conf
+      notify:
+        - reload nginx
+
+    - name: Ensure Nginx is running and enabled
+      service:
+        name: nginx
+        state: started
+        enabled: yes
+      when: ansible_os_family == "Debian"
+
+  handlers:
+    - name: reload nginx
+      service:
+        name: nginx
+        state: reloaded
+      when: ansible_os_family == "Debian"
+
+# Template content: nginx.conf.j2

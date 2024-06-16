@@ -1,0 +1,18 @@
+---
+
+# Generating Human-Readable Timestamps
+- hosts: all
+  tasks:
+    - name: Generate a human-readable timestamp
+      debug:
+        msg: "The current time is {{ ansible_date_time.iso8601 | strftime('%A, %B %d, %Y %I:%M %p') }}"
+
+
+# File Naming with Custom Date Formats
+- hosts: all
+  tasks:
+    - name: Create a file with a custom formatted timestamp
+      file:
+        path: "/tmp/file_{{ ansible_date_time.iso8601 | strftime('%Y%m%d_%H%M%S') }}"
+        state: touch
+

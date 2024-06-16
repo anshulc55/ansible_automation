@@ -1,0 +1,24 @@
+---
+- name: Clone GitHub repository and perform tasks
+  hosts: all
+  become: yes
+  tasks:
+    - name: Ensure Git is installed
+      ansible.builtin.package:
+        name: git
+        state: present
+
+    - name: Clone the GitHub repository
+      ansible.builtin.git:
+        repo: https://github.com/ansible/ansible-examples.git
+        dest: /tmp/ansible-examples
+        update: yes
+        version: master
+
+    - name: Print the contents of a file from the repository
+      ansible.builtin.shell: cat /tmp/ansible-examples/README.md
+      register: readme_contents
+
+    - name: Display the contents of the file
+      debug:
+        msg: "{{ readme_contents.stdout }}"

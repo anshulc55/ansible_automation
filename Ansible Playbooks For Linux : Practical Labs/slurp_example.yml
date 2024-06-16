@@ -1,0 +1,17 @@
+- name: Fetch configuration file from remote server
+  hosts: webservers
+  tasks:
+    - name: Fetch nginx configuration
+      ansible.builtin.slurp:
+        src: /etc/nginx/nginx.conf
+      register: nginx_conf
+
+    - name: Display fetched content
+      debug:
+        msg: "Fetched content: {{ nginx_conf.content | b64decode }}"
+
+    # You can further process the content as needed, for example:
+    - name: Save content to a local file
+      copy:
+        content: "{{ nginx_conf.content | b64decode }}"
+        dest: /tmp/nginx.conf

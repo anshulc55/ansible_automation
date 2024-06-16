@@ -1,0 +1,55 @@
+---
+- name: Install and manage Nginx and Apache services
+  hosts: all
+  become: yes
+  tasks:
+    - name: Update the apt package index
+      apt:
+        update_cache: yes
+
+    - name: Install Nginx
+      apt:
+        name: nginx
+        state: present
+
+    - name: Install Apache
+      apt:
+        name: apache2
+        state: present
+
+    - name: Start and enable Nginx service
+      service:
+        name: nginx
+        state: started
+        enabled: yes
+
+
+- name: Gather and use service facts
+  hosts: all
+  tasks:
+    - name: Gather service facts
+      service_facts:
+    
+    - name: Print all service facts
+      debug:
+        var: ansible_facts.services
+
+    - name: Ensure Nginx service is running
+      service:
+        name: nginx
+        state: started
+      when: ansible_facts.services['nginx'].state != 'running'
+
+    - name: Ensure Apache service is stopped
+      service:
+        name: apache2
+        state: stopped
+      when: ansible_facts.services['apache2'].state != 'stopped'
+
+    - name: Print status of Nginx service
+      debug:
+        msg: "Nginx is {{ ansible_facts.services['nginx'].state }}"
+
+    - name: Print status of Apache service
+      debug:
+        msg: "Apache2 is {{ ansible_facts.services['apache2'].state }}"

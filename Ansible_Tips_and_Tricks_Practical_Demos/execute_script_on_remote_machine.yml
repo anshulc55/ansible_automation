@@ -1,0 +1,34 @@
+---
+
+# Using Scripts Module
+- name: Run Python script using script module
+  hosts: all
+  tasks:
+    - name: Execute hello_world.py script
+      script: hello_world.py
+  tags: scenario1
+
+
+# Copying and Executing the Script
+- hosts: all
+  tasks:
+    - name: Ensure Python 3 is installed
+      apt:
+        name: python3
+        state: present
+      become: yes
+
+    - name: Copy the Python script to remote hosts
+      copy:
+        src: hello_world.py
+        dest: /tmp/hello_world.py
+        mode: '0755'
+
+    - name: Execute hello_world.py script
+      command: python3 /tmp/hello_world.py Ansible Automation
+      register: script_output
+
+    - name: Display script output
+      debug:
+        var: script_output.stdout
+  tags: scenario2

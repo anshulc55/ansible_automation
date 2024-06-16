@@ -1,0 +1,23 @@
+---
+- name: Schedule a weekly log cleanup
+  hosts: all
+  become: yes
+
+  tasks:
+    - name: Ensure the log cleanup script exists
+      copy:
+        src: cleanup_logs.sh
+        dest: /usr/local/bin/cleanup_logs.sh
+        mode: '0755'
+
+    # Every Monday at 3:30 AM
+    - name: Schedule a weekly log cleanup
+      cron:
+        name: "Weekly Log Cleanup"
+        minute: "30"
+        hour: "3"
+        day: "*"
+        month: "*"
+        weekday: "1"
+        job: "/usr/local/bin/cleanup_logs.sh"
+        user: "root"

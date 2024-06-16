@@ -1,0 +1,41 @@
+---
+- name: Manage lines in a text file
+  hosts: localhost
+  tasks:
+    - name: Ensure the file exists
+      file:
+        path: sample.conf
+        state: touch
+
+    - name: Add a line if it doesn't exist
+      lineinfile:
+        path: sample.conf
+        line: 'timeout 60'
+        insertafter: '^port'
+        state: present
+
+    - name: Replace a line if it exists
+      lineinfile:
+        path: sample.conf
+        regexp: '^ssl_enabled.*'
+        line: 'ssl_enabled false'
+
+    - name: Add a line at the beginning of the file
+      lineinfile:
+        path: sample.conf
+        line: '# This is a comment'
+        insertbefore: BOF
+    
+    - name: Read file content using cat
+      command: cat sample.conf
+      register: file_content
+
+    - name: Print file content
+      debug:
+        msg: "{{ file_content.stdout }}"
+
+    - name: Remove a line if it exists
+      lineinfile:
+        path: sample.conf
+        state: absent
+        regexp: '^server_name.*'

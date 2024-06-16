@@ -1,0 +1,80 @@
+---
+- name: Example Playbook for Pausing for Manual Maintenance
+  hosts: all
+  become: yes  # Use sudo to perform operations that require root privileges
+
+  tasks:
+    - name: Notify about maintenance
+      debug:
+        msg: "Maintenance window: Please perform the required checks."
+
+    - name: Pause for maintenance
+      pause:
+        prompt: "Press 'Enter' to continue after maintenance is completed"
+
+    - name: Resume operations post-maintenance
+      shell: echo "Maintenance completed, resuming operations"
+
+  tags: scenario1
+
+
+- name: Install and Start Apache HTTP Server on Ubuntu
+  hosts: all
+  become: yes  # Use sudo to perform operations that require root privileges
+  tasks:
+    - name: Update apt package index
+      apt:
+        update_cache: yes
+
+    - name: Install Apache HTTP Server
+      apt:
+        name: apache2
+        state: present
+
+    - name: Start and enable Apache service
+      systemd:
+        name: apache2
+        state: started
+        enabled: yes
+
+    - name: Pause to allow the web service to start
+      pause:
+        seconds: 30
+
+    - name: Ensure Apache is running
+      systemd:
+        name: apache2
+        state: started
+      register: httpd_status
+
+    - name: Display Apache status
+      debug:
+        msg: "Apache is {{ httpd_status.state }} and enabled."
+
+  tags: scenario2
+
+
+- name: Ansible Pause Parameters
+  hosts: all
+  become: yes  # Use sudo to perform operations that require root privileges
+  tasks:
+    - name: Pause for 30 seconds
+      pause:
+        seconds: 30
+
+    - name: Pause for user confirmation
+      pause:
+        prompt: "Press 'Enter' to continue after verifying the backup"
+
+    - name: Pause for UserName input 
+      pause:
+        prompt: "Enter your UserName: "
+        echo: yes
+
+    - name: Pause for password input without echoing
+      pause:
+        prompt: "Enter your password: "
+        echo: no
+
+  tags: scenario3
+

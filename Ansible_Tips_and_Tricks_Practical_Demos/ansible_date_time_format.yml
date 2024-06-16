@@ -1,0 +1,38 @@
+---
+- hosts: all
+  gather_facts: yes
+  tasks:
+    - name: Print Default Ansible date
+      debug:
+        msg: "Default date is {{ ansible_date_time }}"
+
+    - name: Print current date
+      debug:
+        msg: "Current date is {{ ansible_date_time.date }}"
+
+    - name: Print current time
+      debug:
+        msg: "Current time is {{ ansible_date_time.time }}"
+
+    - name: Print current timestamp
+      debug:
+        msg: "Current timestamp is {{ ansible_date_time.iso8601 }}"
+
+    - name: Print Unix timestamp
+      debug:
+        msg: "Unix timestamp is {{ ansible_date_time.unix }}"
+
+    - name: Create a file with a timestamp
+      file:
+        path: "/tmp/file_{{ ansible_date_time.iso8601 | regex_replace(':', '-') }}"
+        state: touch
+
+
+# Conditional Execution Based on Time
+- hosts: all
+  tasks:
+    - name: Run task only at night
+      debug:
+        msg: "This task runs only at night"
+      when: ansible_date_time.hour | int >= 20 or ansible_date_time.hour | int < 6
+

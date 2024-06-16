@@ -1,0 +1,42 @@
+---
+- name: Manage Nginx Configuration File
+  hosts: localhost
+  tasks:
+    - name: Add a new block of text after a marker
+      blockinfile:
+        path: /etc/nginx/nginx.conf
+        marker: "# START OF NEW BLOCK"
+        block: |
+          # New block of text
+          location /api {
+              proxy_pass http://backend_servers;
+              proxy_set_header Host $host;
+              proxy_set_header X-Real-IP $remote_addr;
+              proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          }
+      register: block_result
+
+    - name: Print the blockinfile result
+      debug:
+        var: block_result
+
+    - name: Replace a block of text between markers
+      blockinfile:
+        path: /etc/nginx/nginx.conf
+        marker: "# START OF NEW BLOCK"
+        block: |
+          # Updated block of text
+          location /api {
+              proxy_pass http://new_backend_servers;
+              proxy_set_header Host $host;
+              proxy_set_header X-Real-IP $remote_addr;
+              proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          }
+      when: "'# START OF NEW BLOCK' in block_result.changed"
+
+    - name: Remove a block of text between markers
+      blockinfile:
+        path: /etc/nginx/nginx.conf
+        marker: "# START OF NEW BLOCK"
+        state: absent
+      when: "'# START OF NEW BLOCK' in block_result.changed"

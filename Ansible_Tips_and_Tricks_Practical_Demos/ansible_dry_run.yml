@@ -1,0 +1,17 @@
+---
+- hosts: all
+  tasks:
+    - name: Ensure a file exists with specific content
+      copy:
+        dest: /tmp/ansible_test_file.txt
+        content: |
+          This is a test file.
+          Managed by Ansible.
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Ensure a line is present in a configuration file
+      lineinfile:
+        path: /tmp/ansible_test_config.conf
+        line: 'ConfigOption=True'

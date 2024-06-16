@@ -1,0 +1,19 @@
+---
+- hosts: all
+  tasks:
+    - name: Using command module to list files
+      command: ls /usr/bin
+      register: command_output
+
+    - name: Display command output
+      debug:
+        msg: "{{ command_output.stdout_lines }}"
+
+    - name: Using shell module to list files and filter with grep
+      shell: ls /usr/bin | grep 'vim'
+      register: shell_output
+
+    - name: Display shell output
+      debug:
+        var: shell_output.stdout
+        

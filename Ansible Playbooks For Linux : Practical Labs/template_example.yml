@@ -1,0 +1,30 @@
+- name: Deploy Apache virtual hosts
+  hosts: webservers
+  become: yes
+
+  tasks:
+    - name: Install Apache
+      yum:
+        name: httpd
+        state: present
+      notify:
+        - Restart Apache
+
+    - name: Ensure Apache is enabled and started
+      service:
+        name: httpd
+        state: started
+        enabled: yes
+
+    - name: Deploy virtual host configuration file
+      template:
+        src: templates/vhost.j2
+        dest: /etc/httpd/conf.d/{{ domain }}.conf
+      notify:
+        - Restart Apache
+
+  handlers:
+    - name: Restart Apache
+      service:
+        name: httpd
+        state: restarted
